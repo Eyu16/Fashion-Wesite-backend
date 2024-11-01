@@ -1,0 +1,55 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+
+  "extends": [
+    "airbnb",
+    "prettier",
+    "plugin:node/recommended"
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-undefined": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "linebreak-style": ["error", "windows"],
+    // "linebreak-style": "off"
+
+    // "prettier/prettier": "error",
+    // "no-undefined": "off",
+    "no-const-assign": "error",
+    "spaced-comment": "off",
+    "no-console": "warn",
+    "consistent-return": "off",
+    "func-names": "off",
+    "object-shorthand": "off",
+    "no-process-exit": "off",
+    "no-param-reassign": "off",
+    "no-return-await": "off",
+    "no-underscore-dangle": "off",
+    "class-methods-use-this": "off",
+    "no-shadow": "off",
+    "prefer-const": "off",
+    "prefer-object-spread": "off",
+    "no-restricted-syntax": "off",
+    "no-use-before-define": "error",
+    "lines-between-class-members": "off",
+    "arrow-body-style": "off",
+    "prefer-destructuring": [
+      "error",
+      { "object": true, "array": false }
+    ],
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "req|res|next|val|error|err"
+      }
+    ]
+  }
+}
