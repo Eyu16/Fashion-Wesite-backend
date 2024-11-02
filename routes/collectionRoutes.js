@@ -9,7 +9,7 @@ router
   .post(collectionContorller.createCollection);
 
 router
-  .route('/:collectionId')
+  .route('/:id')
   .get(collectionContorller.getCollection)
   .patch(collectionContorller.updateCollection)
   .delete(collectionContorller.deleteCollection);
