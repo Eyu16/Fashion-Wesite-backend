@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const collectionSchema = new mongoose.Schema(
   {
@@ -16,21 +17,38 @@ const collectionSchema = new mongoose.Schema(
         'Collection must have a description',
       ],
     },
-    season: Date,
+    season: {
+      type: Date,
+      default: Date.now(),
+    },
     designerName: {
       type: [String],
-      required: [
-        true,
-        'Collection Must have designer name',
-      ],
+      validate: {
+        validator: function (designers) {
+          return designers.length > 0;
+        },
+        message: 'Collection must have at list a desiger!',
+      },
     },
     categories: [String],
-    releaseDate: Date,
+    releaseDate: {
+      type: Date,
+      default: Date.now(),
+    },
     tags: [String],
     material: [String],
-    rating: Number,
-    ratingsAverage: Number,
-    ratingCount: Number,
+    rating: {
+      type: Number,
+      default: 4.5,
+    },
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+    },
+    ratingCount: {
+      type: Number,
+      default: 1,
+    },
     images: {
       type: [String],
       required: [true, 'Collection Must have Pictures'],
@@ -39,7 +57,7 @@ const collectionSchema = new mongoose.Schema(
           return images.length >= 1 && images.length <= 15;
         },
         message:
-          'A collection have minimum of 5 and maximum of 15 images',
+          'A collection have minimum of 4 and maximum of 15 images',
       },
     },
     filmImages: {
@@ -50,12 +68,21 @@ const collectionSchema = new mongoose.Schema(
           return images.length >= 1 && images.length <= 15;
         },
         message:
-          'A collection have minimum of 5 and maximum of 15 images',
+          'A collection have minimum of 4 and maximum of 15 images',
       },
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
     },
   },
   {},
 );
+
+collectionSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 const Collection = mongoose.model(
   'Collection',
