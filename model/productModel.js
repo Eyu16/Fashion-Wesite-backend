@@ -63,9 +63,24 @@ const productSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    hasBackendImage: {
+      type: Boolean,
+      default: false,
+    },
+    resourceUrl: {
+      type: String,
+      default: '',
+    },
   },
-  {},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
+
+// productSchema.virtual('resourceUrl').get(() => {
+//   return '{{URL}}';
+// });
 
 productSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });

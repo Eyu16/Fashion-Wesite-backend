@@ -4,12 +4,20 @@ const ApiFeaturs = require('../utils/apiFeatures');
 
 exports.getAll = (Model) => {
   return catchAsync(async (req, res, next) => {
+    console.log(req.originalUrl);
     const features = new ApiFeaturs(Model.find(), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
     const documents = await features.query;
+    const { protocol } = req;
+    const host = req.get('host');
+    const baseUrl = `${protocol}://${host}/images`;
+    documents.forEach((document) => {
+      if (document?.hasBackendImage)
+        document.resourceUrl = baseUrl;
+    });
     res.status(200).json({
       status: 'success',
       results: documents.length,
@@ -23,7 +31,15 @@ exports.getAll = (Model) => {
 exports.getOne = (Model) => {
   return catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    const document = await Model.findById(id);
+    const { protocol } = req;
+    const host = req.get('host');
+    const baseUrl = `${protocol}://${host}/images`;
+    const document =
+      (await Model.findOne({ slug: id })) ||
+      (await Model.findById(id));
+
+    if (document?.hasBackendImage)
+      document.resourceUrl = baseUrl;
     res.status(200).json({
       status: 'success',
       data: {
@@ -35,6 +51,7 @@ exports.getOne = (Model) => {
 
 exports.createOne = (Model) => {
   return catchAsync(async (req, res, next) => {
+    // console.log(req.body);
     const document = await Model.create(req.body);
     res.status(201).json({
       status: 'success',

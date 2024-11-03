@@ -75,6 +75,14 @@ const collectionSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    hasBackendImage: {
+      type: Boolean,
+      default: false,
+    },
+    resourceUrl: {
+      type: String,
+      default: '',
+    },
   },
   {},
 );

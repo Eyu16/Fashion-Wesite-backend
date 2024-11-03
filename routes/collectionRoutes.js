@@ -1,12 +1,17 @@
 const express = require('express');
 const collectionContorller = require('../controller/collectionController');
+const uploadController = require('../controller/uploadController');
 
 const router = express.Router();
 
 router
   .route('/')
   .get(collectionContorller.getAllCollections)
-  .post(collectionContorller.createCollection);
+  .post(
+    uploadController.uploadCollectionPhotos,
+    uploadController.resizeCollectionPhotos,
+    collectionContorller.createCollection,
+  );
 
 router
   .route('/:id')

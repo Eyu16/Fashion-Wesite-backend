@@ -10,13 +10,13 @@ process.on('uncaughtException', (error) => {
 
 dotenv.config({ path: './config.env' });
 
-// const DB = process.env.DATABASE.replace(
-//   '<PASSWORD>',
-//   process.env.DATABASE_PASSWORD,
-// );
-const DBLocal = process.env.DATABASE_LOCAL;
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD,
+);
+// const DBLocal = process.env.DATABASE_LOCAL;
 mongoose
-  .connect(DBLocal)
+  .connect(DB)
   .then(() => console.log(`DB connection is successful`))
   .catch((error) => {
     console.error(
@@ -24,11 +24,15 @@ mongoose
     );
   });
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(
-    `Server has started successfully on port ${process.env.PORT}`,
-  );
-});
+const server = app.listen(
+  process.env.PORT,
+  '0.0.0.0',
+  () => {
+    console.log(
+      `Server has started successfully on port ${process.env.PORT}`,
+    );
+  },
+);
 
 process.on('unhandledRejection', (error) => {
   console.log('Unhandled Rejection shutting down...');
