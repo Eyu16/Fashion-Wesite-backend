@@ -39,6 +39,7 @@ const sendErrorDev = (error, req, res) => {
 };
 
 const sendErrorPro = (error, req, res) => {
+  console.log(error);
   if (error.isOperational)
     return res.status(error.statusCode).json({
       status: error.status,
