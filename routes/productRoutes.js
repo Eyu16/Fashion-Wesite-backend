@@ -1,12 +1,16 @@
 const express = require('express');
 const productController = require('../controller/productController');
 const uploadController = require('../controller/uploadController');
+const authController = require('../controller/authController');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(productController.getAllProducts)
+  .get(
+    // authController.protect,
+    productController.getAllProducts,
+  )
   .post(
     uploadController.uploadProductPhoto,
     uploadController.resizeProductImage,

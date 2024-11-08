@@ -11,7 +11,7 @@
   ],
   "plugins": ["prettier"],
   "rules": {
-    "no-undefined": "error",
+    // "no-undefined": "error",
     "prettier/prettier": [
       "error",
       {
