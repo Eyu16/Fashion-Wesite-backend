@@ -87,6 +87,15 @@ productSchema.pre('save', function (next) {
   next();
 });
 
+productSchema.pre('findOneAndUpdate', function (next) {
+  // Check if 'name' field is being updated
+  const update = this.getUpdate();
+  if (update.name) {
+    update.slug = slugify(update.name, { lower: true });
+  }
+  next();
+});
+
 const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

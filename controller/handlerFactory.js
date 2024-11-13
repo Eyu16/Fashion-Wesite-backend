@@ -63,6 +63,7 @@ exports.createOne = (Model) => {
 };
 exports.updateOne = (Model) => {
   return catchAsync(async (req, res, next) => {
+    console.log(req.body);
     const { id } = req.params;
     const document = await Model.findByIdAndUpdate(
       id,

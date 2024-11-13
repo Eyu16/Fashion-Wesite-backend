@@ -88,27 +88,31 @@ exports.uploadProductPhoto = upload.fields([
 
 exports.resizeProductImage = catchAsync(
   async (req, res, next) => {
-    console.log(req.body);
-    if (!req.files.image || !req.files.detailImage)
-      return next();
     parseProductData(req);
-    const image = `image-${Date.now()}.jpeg`;
-    const detailImage = `detailImage-${Date.now()}.jpeg`;
+    console.log(req.body.productDetails);
+    if (!req?.files?.image && !req?.files?.detailImage)
+      return next();
 
-    await sharp(req.files.image[0].buffer)
-      .resize(300, 450)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`public/images/${image}`);
+    if (req?.files?.image) {
+      const image = `image-${Date.now()}.jpeg`;
+      await sharp(req.files.image[0].buffer)
+        .resize(300, 450)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/images/${image}`);
+      req.body.image = image;
+    }
+    if (req?.files?.detailImage) {
+      const detailImage = `detailImage-${Date.now()}.jpeg`;
+      await sharp(req.files.detailImage[0].buffer)
+        .resize(600, 600)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/images/${detailImage}`);
 
-    await sharp(req.files.detailImage[0].buffer)
-      .resize(600, 600)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`public/images/${detailImage}`);
+      req.body.detailImage = detailImage;
+    }
 
-    req.body.image = image;
-    req.body.detailImage = detailImage;
     req.body.hasBackendImage = true;
     next();
   },
@@ -137,36 +141,39 @@ exports.uploadCollectionPhotos = upload.fields([
 
 exports.resizeCollectionPhotos = catchAsync(
   async (req, res, next) => {
+    parseCollectionData(req);
     req.body.images = [];
     req.body.filmImages = [];
 
-    if (!req.files.images || !req.files.filmImages)
+    if (!req.files.images && !req.files.filmImages)
       return next();
-    parseCollectionData(req);
 
-    await Promise.all(
-      req.files.images.map(async (file, i) => {
-        const filename = `images-${Date.now()}-${i + 1}.jpeg`;
-        await sharp(file.buffer)
-          .resize(900, 700)
-          .toFormat('jpeg')
-          .jpeg({ quality: 90 })
-          .toFile(`public/images/${filename}`);
-        req.body.images.push(filename);
-      }),
-    );
-
-    await Promise.all(
-      req.files.filmImages.map(async (file, i) => {
-        const filename = `filmImages-${Date.now()}-${i + 1}.jpeg`;
-        await sharp(file.buffer)
-          .resize(500, 333)
-          .toFormat('jpeg')
-          .jpeg({ quality: 90 })
-          .toFile(`public/images/${filename}`);
-        req.body.filmImages.push(filename);
-      }),
-    );
+    if (req.files.images) {
+      await Promise.all(
+        req.files.images.map(async (file, i) => {
+          const filename = `images-${Date.now()}-${i + 1}.jpeg`;
+          await sharp(file.buffer)
+            .resize(900, 700)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/images/${filename}`);
+          req.body.images.push(filename);
+        }),
+      );
+    }
+    if (req.files.filmImages) {
+      await Promise.all(
+        req.files.filmImages.map(async (file, i) => {
+          const filename = `filmImages-${Date.now()}-${i + 1}.jpeg`;
+          await sharp(file.buffer)
+            .resize(500, 333)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/images/${filename}`);
+          req.body.filmImages.push(filename);
+        }),
+      );
+    }
 
     req.body.hasBackendImage = true;
     console.log(req.body);
