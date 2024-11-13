@@ -20,7 +20,11 @@ router
 router
   .route('/:id')
   .get(productController.getProduct)
-  .patch(productController.updateProduct)
+  .patch(
+    uploadController.uploadProductPhoto,
+    uploadController.resizeProductImage,
+    productController.updateProduct,
+  )
   .delete(productController.deleteProduct);
 
 module.exports = router;

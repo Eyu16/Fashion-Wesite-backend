@@ -88,6 +88,7 @@ exports.uploadProductPhoto = upload.fields([
 
 exports.resizeProductImage = catchAsync(
   async (req, res, next) => {
+    console.log(req.body);
     if (!req.files.image || !req.files.detailImage)
       return next();
     parseProductData(req);
