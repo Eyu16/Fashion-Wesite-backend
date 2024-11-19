@@ -25,11 +25,13 @@ const createSendToken = (user, statusCode, req, res) => {
           1000,
     ),
     httpOnly: true,
+    secure: true,
+    sameSite: 'none',
   };
-  if (process.env.NODE_ENV === 'production') {
-    if (req.secure) cookieOptions.secure = true;
-    cookieOptions.sameSite = 'none';
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   if (req.secure) cookieOptions.secure = true;
+  //   cookieOptions.sameSite = 'none';
+  // }
 
   // if (req.secure) cookieOptions.secure = true;
 
