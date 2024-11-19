@@ -26,6 +26,10 @@ const createSendToken = (user, statusCode, req, res) => {
     ),
     httpOnly: true,
   };
+  if (process.env.NODE_ENV === 'production') {
+    if (req.secure) cookieOptions.secure = true;
+    cookieOptions.sameSite = 'none';
+  }
 
   // if (req.secure) cookieOptions.secure = true;
 
