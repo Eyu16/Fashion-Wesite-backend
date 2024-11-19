@@ -27,7 +27,7 @@ const createSendToken = (user, statusCode, req, res) => {
     httpOnly: true,
   };
 
-  if (req.secure) cookieOptions.secure = true;
+  // if (req.secure) cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
@@ -59,6 +59,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   )
     token = req.headers.authorization.split(' ')[1];
   else if (req.cookies.jwt) token = req.cookies.jwt;
+
+  console.log(req.cookies.jwt);
 
   if (token === 'null' || !token)
     return next(

@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "673bf2d5b731aa269bd98bbf"
+  },
+  "email": "m@gmail.com",
+  "password": "$2a$08$FPsyWd0fyJjxfroJDM4oVum069D6CPHA3gaAPDfInXfTevNLdwkjm",
+  "passwordChangedAt": {
+    "$date": "2024-11-19T02:07:17.541Z"
+  },
+  "__v": 0,
+  "role": "admin"
+},
+{
+  "_id": {
+    "$oid": "673c1d9ed2ad818050637b77"
+  },
+  "email": "eyobyihalem@gmail.com",
+  "password": "$2a$08$M5ekTu0UVMiuiEXUx3v50.Cx8s6LdaZIK1UXe4kehAh7uW/PW6zV6",
+  "role": "user",
+  "passwordChangedAt": {
+    "$date": "2024-11-19T05:09:50.207Z"
+  },
+  "__v": 0
+}]

@@ -44,7 +44,8 @@
   "slug": "ethereal-dream",
   "__v": 0,
   "resourceUrl": "",
-  "hasBackendImage": false
+  "hasBackendImage": false,
+  "isSelected": true
 },
 {
   "_id": {
@@ -91,5 +92,55 @@
   "hasBackendImage": true,
   "resourceUrl": "",
   "slug": "ethereal-dreamform",
+  "__v": 0,
+  "isSelected": false
+},
+{
+  "_id": {
+    "$oid": "673bf89fd5b555c696056816"
+  },
+  "name": "Ethereal Dream333",
+  "description": "Inspired by the beauty of nature, this collection features flowing silhouettes and delicate fabrics that evoke a sense of serenity and dreaminess.",
+  "season": {
+    "$date": "2024-01-01T08:00:00.000Z"
+  },
+  "designerName": [
+    "Ava Sinclair"
+  ],
+  "categories": [
+    "Evening Wear",
+    "Bridal"
+  ],
+  "releaseDate": {
+    "$date": "2024-02-15T00:00:00.000Z"
+  },
+  "tags": [
+    "luxury",
+    "romantic",
+    "sustainable"
+  ],
+  "material": [],
+  "rating": 4.8,
+  "ratingsAverage": 4.5,
+  "ratingCount": 20,
+  "images": [
+    "Square4(1).jpg",
+    "Square6(2).jpg",
+    "Square5(2).jpg",
+    "Square7(2).jpg"
+  ],
+  "filmImages": [
+    "Square4(2).jpg",
+    "Square6(1).jpeg",
+    "Square5(1).jpeg",
+    "Square7(1).jpeg"
+  ],
+  "createdAt": {
+    "$date": "2024-11-19T02:31:53.807Z"
+  },
+  "hasBackendImage": false,
+  "resourceUrl": "",
+  "isSelected": false,
+  "slug": "ethereal-dream3",
   "__v": 0
 }]

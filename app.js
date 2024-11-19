@@ -9,8 +9,39 @@ const userRouter = require('./routes/userRoutes');
 const emailRouter = require('./routes/emailRoutes');
 const globalErrorHandler = require('./controller/errorController');
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://192.168.8.102:5173',
+  'https://marakifashion.netlify.app',
+];
 const app = express();
-app.use(cors());
+// app.use(options(), '*');
+// app.use(
+//   cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true,
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//   }),
+// );
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
+
+app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
