@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema(
       required: [true, 'User must have password!'],
       select: false,
     },
+    passwordChangedAt: {
+      type: Date,
+      select: false,
+    },
+    role: {
+      type: String,
+      default: 'user',
+      enum: ['user', 'admin'],
+    },
   },
   {
     toObject: { virtuals: true },
@@ -23,8 +32,17 @@ const userSchema = new mongoose.Schema(
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 8);
+  this.passwordChangedAt = new Date();
   next();
 });
+
+userSchema.methods.passwordChangedAfter = function (
+  JWTTimeStamp,
+) {
+  const passwordChangedAt =
+    this.passwordChangedAt.getTime() / 1000;
+  return passwordChangedAt > JWTTimeStamp;
+};
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,

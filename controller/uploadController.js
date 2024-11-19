@@ -61,18 +61,50 @@ const parseCollectionData = (req) => {
   req.body.overview = req.body.overview === 'true';
 
   // Parse array fields
-  req.body.designerName = req.body.designerName
-    ? JSON.parse(req.body.designerName)
-    : [];
-  req.body.categories = req.body.categories
-    ? JSON.parse(req.body.categories)
-    : [];
-  req.body.tags = req.body.tags
-    ? JSON.parse(req.body.tags)
-    : [];
-  req.body.materials = req.body.materials
-    ? JSON.parse(req.body.materials)
-    : [];
+  if (req.body.designerName) {
+    req.body.designerName =
+      typeof req.body.designerName === 'string'
+        ? JSON.parse(req.body.designerName)
+        : req.body.designerName;
+  } else {
+    req.body.designerName = [];
+  }
+
+  // req.body.categories = req.body.categories
+  //   ? JSON.parse(req.body.categories)
+  //   : [];
+  // req.body.tags = req.body.tags
+  //   ? JSON.parse(req.body.tags)
+  //   : [];
+  // req.body.materials = req.body.materials
+  //   ? JSON.parse(req.body.materials)
+  //   : [];
+  if (req.body.categories) {
+    req.body.categories =
+      typeof req.body.categories === 'string'
+        ? JSON.parse(req.body.categories)
+        : req.body.categories;
+  } else {
+    req.body.categories = [];
+  }
+
+  if (req.body.tags) {
+    req.body.tags =
+      typeof req.body.tags === 'string'
+        ? JSON.parse(req.body.tags)
+        : req.body.tags;
+  } else {
+    req.body.tags = [];
+  }
+
+  if (req.body.materials) {
+    req.body.materials =
+      typeof req.body.materials === 'string'
+        ? JSON.parse(req.body.materials)
+        : req.body.materials;
+  } else {
+    req.body.materials = [];
+  }
 };
 
 exports.uploadProductPhoto = upload.fields([
@@ -142,13 +174,13 @@ exports.uploadCollectionPhotos = upload.fields([
 exports.resizeCollectionPhotos = catchAsync(
   async (req, res, next) => {
     parseCollectionData(req);
-    req.body.images = [];
-    req.body.filmImages = [];
 
-    if (!req.files.images && !req.files.filmImages)
+    if (!req?.files?.images && !req?.files?.filmImages)
       return next();
 
-    if (req.files.images) {
+    if (req?.files?.images) {
+      req.body.images = [];
+
       await Promise.all(
         req.files.images.map(async (file, i) => {
           const filename = `images-${Date.now()}-${i + 1}.jpeg`;
@@ -161,7 +193,9 @@ exports.resizeCollectionPhotos = catchAsync(
         }),
       );
     }
-    if (req.files.filmImages) {
+    if (req?.files?.filmImages) {
+      req.body.filmImages = [];
+
       await Promise.all(
         req.files.filmImages.map(async (file, i) => {
           const filename = `filmImages-${Date.now()}-${i + 1}.jpeg`;

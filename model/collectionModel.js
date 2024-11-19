@@ -83,8 +83,16 @@ const collectionSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
   },
-  {},
+
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 collectionSchema.pre('save', function (next) {

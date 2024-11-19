@@ -4,6 +4,10 @@ const catchAsync = require('../utils/catchAsync');
 const User = require('../model/userModel');
 const AppError = require('../utils/appError');
 
+const allowedFor = function (user, roles) {
+  return roles.includes(user.role);
+};
+
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -69,7 +73,9 @@ exports.protect = catchAsync(async (req, res, next) => {
     process.env.JWT_SECRET,
   );
 
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(
+    decoded.id,
+  ).select('+passwordChangedAt');
   if (!currentUser)
     return next(
       new AppError(
@@ -78,9 +84,35 @@ exports.protect = catchAsync(async (req, res, next) => {
       ),
     );
 
+  // check if password has been changed
+  if (currentUser.passwordChangedAfter(decoded.iat))
+    return next(
+      new AppError(
+        'Password has been changed. Please login again!',
+        401,
+      ),
+    );
+
   req.user = currentUser;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return catchAsync(async (req, res, next) => {
+    console.log(roles);
+    if (!allowedFor(req.user, roles))
+      return next(
+        new AppError(
+          'You are not authorized to performe this action!',
+          403,
+        ),
+      );
+    next();
+  });
+};
+// exports.restrictTo = catchAsync(
+//   async (req, res, next) => {},
+// );
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -98,10 +130,10 @@ exports.login = catchAsync(async (req, res, next) => {
     !user ||
     !(await user.correctPassword(password, user.password))
   )
+    //
     return next(
       new AppError('Incorrect Email or Password!', 401),
     );
-
   createSendToken(user, 200, req, res);
 });
 
