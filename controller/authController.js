@@ -28,12 +28,6 @@ const createSendToken = (user, statusCode, req, res) => {
     secure: true,
     sameSite: 'none',
   };
-  // if (process.env.NODE_ENV === 'production') {
-  //   if (req.secure) cookieOptions.secure = true;
-  //   cookieOptions.sameSite = 'none';
-  // }
-
-  // if (req.secure) cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
@@ -92,7 +86,6 @@ exports.protect = catchAsync(async (req, res, next) => {
       ),
     );
 
-  // check if password has been changed
   if (currentUser.passwordChangedAfter(decoded.iat))
     return next(
       new AppError(
@@ -118,9 +111,6 @@ exports.restrictTo = (...roles) => {
     next();
   });
 };
-// exports.restrictTo = catchAsync(
-//   async (req, res, next) => {},
-// );
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -138,7 +128,6 @@ exports.login = catchAsync(async (req, res, next) => {
     !user ||
     !(await user.correctPassword(password, user.password))
   )
-    //
     return next(
       new AppError('Incorrect Email or Password!', 401),
     );
