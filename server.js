@@ -17,7 +17,7 @@ const DB = process.env.DATABASE.replace(
 const DBLocal = process.env.DATABASE_LOCAL;
 
 mongoose
-  .connect(DBLocal)
+  .connect(DB)
   .then(() => console.log(`DB connection is successful`))
   .catch((error) => {
     console.error(
