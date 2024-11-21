@@ -30,14 +30,13 @@ module.exports = class Email {
     );
 
     const mailOptions = {
-      from: `${this.firstName} <${this.from}>`,
-      to: this.to,
+      from: `${this.firstName} <${this.to}>`,
+      to: this.from,
       subject,
       html,
       text: convert(html, {
         wordwrap: 130,
       }),
-      replyTo: this.from,
     };
     const info =
       await this.newTransport().sendMail(mailOptions);
@@ -68,5 +67,31 @@ module.exports = class Email {
       },
     };
     await this.newTransport().sendMail(mailOptions);
+  }
+
+  async sendPaymentUrl(url, template = 'makePayment') {
+    const subject =
+      'Make payments on chapa as soon as possible';
+    const html = pug.renderFile(
+      `${__dirname}/../views/${template}.pug`,
+      {
+        // firstName: this.firstName,
+        subject,
+        url,
+      },
+    );
+
+    const mailOptions = {
+      from: `MarakiFashion <${this.to}>`,
+      to: this.from,
+      subject,
+      html,
+      text: convert(html, {
+        wordwrap: 130,
+      }),
+    };
+    const info =
+      await this.newTransport().sendMail(mailOptions);
+    return info.messageId;
   }
 };

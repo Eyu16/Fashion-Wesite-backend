@@ -42,12 +42,16 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.singup = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, phone } = req.body;
   if (!email || !password)
     return next(
       new AppError('User password and Email are require'),
     );
-  const user = await User.create({ email, password });
+  const user = await User.create({
+    email,
+    password,
+    phone,
+  });
   createSendToken(user, 201, req, res);
 });
 

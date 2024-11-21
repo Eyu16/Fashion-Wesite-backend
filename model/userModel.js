@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema(
       default: 'user',
       enum: ['user', 'admin'],
     },
+    phone: {
+      type: String,
+      required: [true, 'user phone number is required'],
+      unique: true,
+    },
   },
   {
     toObject: { virtuals: true },

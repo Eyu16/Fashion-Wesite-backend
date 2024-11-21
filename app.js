@@ -14,7 +14,7 @@ const orderController = require('./controller/orderController');
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'http://192.168.8.102:5173',
+  'http://192.168.137.214:5173',
   'https://marakifashion.netlify.app',
 ];
 const app = express();

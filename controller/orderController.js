@@ -2,9 +2,10 @@ const axios = require('axios');
 const Product = require('../model/productModel');
 const Order = require('../model/orderModel');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
+const Email = require('../utils/Email');
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const updatedCart = await Promise.all(
     req.body.cart.map(async (item) => {
       const product = await Product.findById(
@@ -18,6 +19,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
   req.body.cart = updatedCart;
   req.body.user = req.user.id;
+  req.body.email = req.user.email;
+  req.body.phone = req.user.phone;
   req.body.totalPrice = updatedCart.reduce(
     (acc, cur) => acc + cur.price * cur.quantity,
     0,
@@ -46,6 +49,11 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   req.body.paymentUrl = session?.data?.data?.checkout_url;
 
   const order = await Order.create(req.body);
+
+  const messageId = await new Email(
+    'Maraki-Fashion',
+    req.body.email,
+  ).sendPaymentUrl(req.body.paymentUrl);
 
   res.status(200).json({
     status: 'success',
@@ -87,3 +95,5 @@ exports.verifyPayment = async (req, res, next) => {
       tx_ref: 'unique_reference_id',
     });
 };
+
+exports.getAllOrders = factory.getAll(Order);
