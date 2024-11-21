@@ -69,7 +69,11 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendPaymentUrl(url, template = 'makePayment') {
+  async sendPaymentUrl(
+    url,
+    transactionId,
+    template = 'makePayment',
+  ) {
     const subject =
       'Make payments on chapa as soon as possible';
     const html = pug.renderFile(
@@ -78,6 +82,32 @@ module.exports = class Email {
         // firstName: this.firstName,
         subject,
         url,
+        transactionId,
+      },
+    );
+
+    const mailOptions = {
+      from: `MarakiFashion <${this.to}>`,
+      to: this.from,
+      subject,
+      html,
+      text: convert(html, {
+        wordwrap: 130,
+      }),
+    };
+    const info =
+      await this.newTransport().sendMail(mailOptions);
+    return info.messageId;
+  }
+  async sendPaymentSuccessfullMessage(
+    template = 'paymentSuccessful',
+  ) {
+    const subject =
+      'Payment Confirmed! Your Order is on the Way!';
+    const html = pug.renderFile(
+      `${__dirname}/../views/${template}.pug`,
+      {
+        subject,
       },
     );
 

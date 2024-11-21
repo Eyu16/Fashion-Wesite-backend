@@ -36,7 +36,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       currency: 'ETB',
       email: req.user.email,
       tx_ref: txRef,
-      callback_url: `https://${req.get('host')}/verifyPayment/${txRef}`,
+      callback_url: `http://${req.get('host')}/verifyPayment/${txRef}`,
     },
     {
       headers: {
@@ -50,10 +50,10 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
   const order = await Order.create(req.body);
 
-  const messageId = await new Email(
+  new Email(
     'Maraki-Fashion',
     req.body.email,
-  ).sendPaymentUrl(req.body.paymentUrl);
+  ).sendPaymentUrl(req.body.paymentUrl, txRef);
 
   res.status(200).json({
     status: 'success',
@@ -84,6 +84,12 @@ exports.verifyPayment = async (req, res, next) => {
         runValidators: true,
       },
     );
+    // console.log(response);
+    new Email(
+      'Maraki-Fashion',
+      response.data.data.email,
+    ).sendPaymentSuccessfullMessage();
+
     res.status(200).json({
       recieved: true,
     });
