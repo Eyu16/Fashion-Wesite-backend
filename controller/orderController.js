@@ -103,3 +103,17 @@ exports.verifyPayment = async (req, res, next) => {
 };
 
 exports.getAllOrders = factory.getAll(Order);
+
+exports.getCurrentUserOrders = catchAsync(
+  async (req, res, next) => {
+    const documents = await Order.find({
+      user: req.user.id,
+    });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        documents,
+      },
+    });
+  },
+);
