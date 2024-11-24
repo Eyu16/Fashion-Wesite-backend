@@ -30,8 +30,8 @@ module.exports = class Email {
     );
 
     const mailOptions = {
-      from: `${this.firstName} <${this.to}>`,
-      to: this.from,
+      from: `${this.firstName} <${this.from}>`,
+      to: this.to,
       subject,
       html,
       text: convert(html, {
@@ -40,11 +40,10 @@ module.exports = class Email {
     };
     const info =
       await this.newTransport().sendMail(mailOptions);
-    console.log(info);
     return info.messageId;
   }
 
-  async sendReply(originalMessageId) {
+  async sendReply() {
     const subject =
       'Thank you for contacting Maraki Fashion';
     const html = pug.renderFile(
@@ -56,15 +55,15 @@ module.exports = class Email {
     );
 
     const mailOptions = {
-      from: `${this.firstName} <${process.env.GMAIL_USERNAME}>`,
+      from: `Maraki Fashion <${process.env.GMAIL_USERNAME}>`,
       to: this.from, // Send reply to the sender's email
       subject,
       html,
       text: convert(html, { wordwrap: 130 }),
-      headers: {
-        'In-Reply-To': originalMessageId,
-        References: originalMessageId,
-      },
+      // headers: {
+      //   'In-Reply-To': originalMessageId,
+      //   References: originalMessageId,
+      // },
     };
     await this.newTransport().sendMail(mailOptions);
   }
