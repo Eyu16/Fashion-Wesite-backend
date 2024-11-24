@@ -37,6 +37,7 @@ module.exports = class Email {
       text: convert(html, {
         wordwrap: 130,
       }),
+      replyTo: this.from,
     };
     const info =
       await this.newTransport().sendMail(mailOptions);
